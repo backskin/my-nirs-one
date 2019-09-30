@@ -1,6 +1,3 @@
-from skimage.io import imread, imshow, imsave
-import matplotlib.pyplot as plt
-
 def convolution(img, mask):
     import numpy as np
     img_w = img.shape[0]
@@ -28,9 +25,9 @@ def convolution(img, mask):
 
 def convolution_rgb(img, mask):
 
-    img[:, :, 0] = convolution(image[:, :, 0], mask)
-    img[:, :, 1] = convolution(image[:, :, 1], mask)
-    img[:, :, 2] = convolution(image[:, :, 2], mask)
+    img[:, :, 0] = convolution(img[:, :, 0], mask)
+    img[:, :, 1] = convolution(img[:, :, 1], mask)
+    img[:, :, 2] = convolution(img[:, :, 2], mask)
 
     return img
 
@@ -106,28 +103,29 @@ def rng_filter(method, img, mask):
     return new_img
 
 
-def noising(img):
+def noising(img, k):
     import numpy as np
-    img[:, :] = img[:, :] + np.random.normal(0, 255, 1)
+    noise_mask = np.array([[int(np.random.normal(0, k, 1)[0]) for j in range(img.shape[1])] for i in range(img.shape[0])])
+    img[:, :] = np.clip(img[:, :] + noise_mask[:, :], 0, 255)
     return img
 
 
-def noising_rgb(img):
+def noising_rgb(img, ratio):
 
-    img[:, :, 0] = noising(img[:, :, 0])
-    img[:, :, 1] = noising(img[:, :, 1])
-    img[:, :, 2] = noising(img[:, :, 2])
+    img[:, :, 0] = noising(img[:, :, 0], ratio)
+    img[:, :, 1] = noising(img[:, :, 1], ratio)
+    img[:, :, 2] = noising(img[:, :, 2], ratio)
 
     return img
 
 
-def noising_by_yuv(img):
+def noising_by_yuv(img, ratio):
     from colorsystem.bt709 import to_yuv, to_rgb
     from skimage import img_as_float, img_as_ubyte
     import numpy as np
 
-    cont_yuv = to_yuv(img)
-    cont_yuv[:, :, 0] = img_as_float(noising(img_as_ubyte(cont_yuv[:, :, 0])))
+    cont_yuv = to_yuv(img_as_float(img))
+    cont_yuv[:, :, 0] = img_as_float(noising(img_as_ubyte(cont_yuv[:, :, 0]), ratio))
     cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), 0.0, 1.0))
 
     return cont_rgb
@@ -142,36 +140,3 @@ def rng_filter_rgb(method, img, mask):
     img[:, :, 2] = rng_filter(method, img[:, :, 2], mask)
 
     return img
-
-
-import numpy as np
-
-image = imread('tiger-color.png')
-sharp_mask = np.array([[-1, -1, -1],
-                       [-1, 9, -1],
-                       [-1, -1, -1]])
-
-sharp_mask = sharp_mask[:, :] * 1
-
-imshow(image)
-plt.show()
-
-# img = convolution_rgb(image.copy(), sharp_mask)
-# imsave('tiger-color-sharp.png', img)
-# imshow(img)
-# plt.show()
-
-img = rng_filter_rgb(median, image.copy(), [[1] * 3] * 3)
-imsave('tiger-color-median.png', img)
-imshow(img)
-plt.show()
-
-img = rng_filter_rgb(erosion, image.copy(), [[1] * 3] * 3)
-imsave('tiger-color-eros.png', img)
-imshow(img)
-plt.show()
-
-img = rng_filter_rgb(dilatation, image.copy(), [[1] * 3] * 3)
-imsave('tiger-color-dilat.png', img)
-imshow(img)
-plt.show()
