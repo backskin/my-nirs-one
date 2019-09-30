@@ -1,24 +1,20 @@
 import numpy as np
-from skimage.io import imread, imsave, imshow
+import random
+from skimage.io import imread, imsave
 from skimage import img_as_float, img_as_ubyte
 import graylib as grl
-import matplotlib.pyplot as plt
 import colorsystem.bt709 as bt
 
 
-image = img_as_float(imread('tiger-color.png'))
+seed_1 = 'hello'
 
-image_yuv = bt.to_yuv(image)
-image_restored = np.clip(bt.to_rgb(image_yuv), 0.0, 1.0)
+random.seed(seed_1)
+key_mask = [[random.getrandbits(1) for i in range(4)] for j in range(4)]
+print(key_mask)
 
-image = img_as_ubyte(image)
-image_restored = img_as_ubyte(image_restored)
+key_mask = [[random.getrandbits(1) for i in range(4)] for j in range(4)]
+print(key_mask)
 
-print((image - image_restored).sum(), np.array_equal(image_restored, image))
-
-image_yuv[:, :, 0] = grl.lin_con(image_yuv[:, :, 0], 0.05)
-
-image_restored = np.clip(bt.to_rgb(image_yuv), 0.0, 1.0)
-image_restored = img_as_ubyte(image_restored)
-
-imsave('out_img.png', image_restored)
+random.seed(seed_1)
+key_mask = [[random.getrandbits(1) for i in range(4)] for j in range(4)]
+print(key_mask)

@@ -29,6 +29,8 @@ def hist(img):
     return histogram
 
 
+
+
 def lin_con_uint(img, precision):
     x_min, x_max = np.percentile(img, [100*precision, 100*(1 - precision)])
     img_out = 255 * (img - x_min) / (x_max - x_min)

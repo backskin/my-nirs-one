@@ -1,9 +1,8 @@
-import numpy as np
 from skimage.io import imread, imshow, imsave
 import matplotlib.pyplot as plt
 
 def convolution(img, mask):
-
+    import numpy as np
     img_w = img.shape[0]
     img_h = img.shape[1]
     m_w = len(mask)
@@ -37,6 +36,7 @@ def convolution_rgb(img, mask):
 
 
 def dilatation(block, mask):
+    import numpy as np
     mask = np.array(mask).flatten()
     block = np.array(block).flatten()
     array = []
@@ -50,6 +50,7 @@ def dilatation(block, mask):
 
 
 def erosion(block, mask):
+    import numpy as np
     mask = np.array(mask).flatten()
     block = np.array(block).flatten()
     array = []
@@ -63,7 +64,7 @@ def erosion(block, mask):
 
 
 def median(block, mask):
-
+    import numpy as np
     if len(block) != len(mask):
         raise Exception('Exception during filtering:', 'block.len %d != mask.len %d' % (len(block), len(mask)))
 
@@ -82,6 +83,7 @@ def median(block, mask):
 
 
 def rng_filter(method, img, mask):
+    import numpy as np
     img_w = img.shape[0]
     img_h = img.shape[1]
     m_w = len(mask)
@@ -104,6 +106,33 @@ def rng_filter(method, img, mask):
     return new_img
 
 
+def noising(img):
+    import numpy as np
+    img[:, :] = img[:, :] + np.random.normal(0, 255, 1)
+    return img
+
+
+def noising_rgb(img):
+
+    img[:, :, 0] = noising(img[:, :, 0])
+    img[:, :, 1] = noising(img[:, :, 1])
+    img[:, :, 2] = noising(img[:, :, 2])
+
+    return img
+
+
+def noising_by_yuv(img):
+    from colorsystem.bt709 import to_yuv, to_rgb
+    from skimage import img_as_float, img_as_ubyte
+    import numpy as np
+
+    cont_yuv = to_yuv(img)
+    cont_yuv[:, :, 0] = img_as_float(noising(img_as_ubyte(cont_yuv[:, :, 0])))
+    cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), 0.0, 1.0))
+
+    return cont_rgb
+
+
 def rng_filter_rgb(method, img, mask):
 
     if mask is None:
@@ -114,6 +143,8 @@ def rng_filter_rgb(method, img, mask):
 
     return img
 
+
+import numpy as np
 
 image = imread('tiger-color.png')
 sharp_mask = np.array([[-1, -1, -1],
