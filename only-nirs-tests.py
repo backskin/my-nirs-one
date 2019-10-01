@@ -19,10 +19,12 @@ for i in range(steps):
     im_with_dwm = insert_dwm(image, dwm)
     im_with_dwm = noising_yuv(im_with_dwm, i * k)
     im_with_dwm = rng_filter_yuv(median, im_with_dwm)
+    imsave('red_flower-r'+str(i) +'.png', im_with_dwm)
     dwm_layer = extract_dwm(im_with_dwm)
     dwm_g = dwm_guess(dwm_layer, dwm.shape[0], dwm.shape[1])
+    imsave('dwm_red_flower-'+str(i)+'.png', dwm_g)
     values += [similarity(dwm, dwm_g) * 100]
-    print('Got ', i, 'Similarity = %.2f prc' % values[i])
+    print('Got ', (i+1), 'Similarity = %.2f prc' % values[i])
 
 plt.plot(np.array(range(steps)) * k, values)
 plt.xlabel('отн-я дисперсия шума')
