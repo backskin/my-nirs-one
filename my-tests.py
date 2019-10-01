@@ -1,18 +1,14 @@
 from skimage.io import imread, imsave, imshow
-from skimage import img_as_float, img_as_ubyte
 import matplotlib.pyplot as plt
 import numpy as np
-from bt709 import to_yuv
 from filters import rng_filter_yuv, median, erosion, dilatation, \
     convolution_rgb, convolution_yuv, noising_yuv, similarity
-from stegos import insert_dwm, extract_dwm, insert_dwm_wkey, extract_dwm_wkey, dwm_guess, nzb_insert, nzb_extract
+from stegas import insert_dwm, extract_dwm, insert_dwm_wkey, \
+    extract_dwm_wkey, dwm_guess, nzb_insert, nzb_extract
 
 # TEST 1 : simple inception
 #
 image, dwm = imread('palm-tree.png'), imread('dwm3.bmp')
-image_yuv = to_yuv(img_as_float(image))
-imsave('cont-yuv.png', img_as_ubyte(image_yuv))
-imsave('cont-yuv-y.png', img_as_ubyte(np.array(image_yuv[:, :, 0])))
 im_with_dwm = insert_dwm(image, dwm)
 imsave('cont-with-dwm.png', im_with_dwm)
 again_img = imread('cont-with-dwm.png')

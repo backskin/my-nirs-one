@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from filters import noising_yuv, similarity
-from stegos import insert_dwm, extract_dwm, dwm_guess
+from stegas import insert_dwm, extract_dwm, dwm_guess
 
 # Test 0 - зашумить - встроить ЦВЗ - восстановить медианой - извлечь ЦВЗ
 # График зависимости для шума (его дисперсии)
