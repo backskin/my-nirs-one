@@ -1,3 +1,25 @@
+def hist(img):
+    histogram = [0] * 256
+    for i in range(len(img)):
+        for j in range(len(img[i])):
+            histogram[img[i, j]] += 1
+    return histogram
+
+
+def lin_con_uint(img, precision):
+    import numpy as np
+    x_min, x_max = np.percentile(img, [100*precision, 100*(1 - precision)])
+    img_out = 255 * (img - x_min) / (x_max - x_min)
+    return np.clip(img_out, 0, 255).astype(np.uint8)
+
+
+def lin_con(img, precision):
+    import numpy as np
+    x_min, x_max = np.percentile(img, [100*precision, 100*(1 - precision)])
+    img_out = (img - x_min) / (x_max - x_min)
+    return np.clip(img_out, 0.0, 1.0)
+
+
 def image_expand(img, m_w, m_h):
     import numpy as np
     img_w = img.shape[0]
