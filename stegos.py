@@ -30,7 +30,8 @@ def nzb_insert_secured(contan, mark, key):
 
     random.seed(key)
     key_mask = np.array([[random.getrandbits(1)
-                          for j in range(new_cont.shape[1])] for i in range(new_cont.shape[0])]).astype(np.uint8)
+                        for j in range(new_cont.shape[1])]
+                         for i in range(new_cont.shape[0])]).astype(np.uint8)
 
     for i in range(len(contan) // st_i):
         for j in range(len(contan[0]) // st_j):
