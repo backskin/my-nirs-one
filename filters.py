@@ -137,7 +137,6 @@ def rng_filter_rgb(method, img, mask=None):
 
 
 def rng_filter_yuv(method, img, mask=None):
-
     from colorsystem.bt709 import to_yuv, to_rgb
     from skimage import img_as_float, img_as_ubyte
     import numpy as np
@@ -154,4 +153,4 @@ def rng_filter_yuv(method, img, mask=None):
 def similarity(img1, img2):
     import numpy as np
     sqr = img1.shape[0] * img1.shape[1]
-    return 2 *((sqr - (np.clip(abs(img1[:, :] - img2[:, :]), -1, 1).sum())) / sqr - 0.5)
+    return 2 * ((sqr - (np.clip(abs(img1[:, :] - img2[:, :]), -1, 1).sum())) / sqr - 0.5)
