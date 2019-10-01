@@ -99,7 +99,8 @@ def rng_filter(method, img, mask):
 def noising(img, k):
     import numpy as np
     noise_mask = np.array(
-        [[int(np.random.normal(0, k, 1)[0]) for j in range(img.shape[1])] for i in range(img.shape[0])])
+        [[int(np.random.normal(0, k, 1)[0])
+          for j in range(img.shape[1])] for i in range(img.shape[0])])
     img[:, :] = np.clip(img[:, :] + noise_mask[:, :], 0, 255)
     return img
 

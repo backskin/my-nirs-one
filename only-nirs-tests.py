@@ -13,12 +13,11 @@ values = []
 steps = 20
 k = 0.5
 
-
 for i in range(steps):
     image, dwm = imread('red-flower.png'), imread('dwm3.bmp')
     im_with_dwm = insert_dwm(image, dwm)
     im_with_dwm = noising_yuv(im_with_dwm, i * k)
-    im_with_dwm = rng_filter_yuv(median, im_with_dwm)
+    # im_with_dwm = rng_filter_yuv(median, im_with_dwm)
     dwm_layer = extract_dwm(im_with_dwm)
     dwm_g = dwm_guess(dwm_layer, dwm.shape[0], dwm.shape[1])
     imsave('dwm_red_flower-'+str(i)+'.png', dwm_g)
