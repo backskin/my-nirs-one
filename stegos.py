@@ -1,13 +1,12 @@
 def nzb_insert(contan, mark):
-
     new_cont = contan.copy()
     st_i = len(mark)
     st_j = len(mark[0])
 
     for i in range(len(contan) // st_i):
         for j in range(len(contan[0]) // st_j):
-            old_bit = new_cont[i*st_i:(i+1)*st_i, j*st_j:(j+1)*st_j] % 2
-            new_cont[i*st_i:(i+1)*st_i, j*st_j:(j+1)*st_j] -= \
+            old_bit = new_cont[i * st_i:(i + 1) * st_i, j * st_j:(j + 1) * st_j] % 2
+            new_cont[i * st_i:(i + 1) * st_i, j * st_j:(j + 1) * st_j] -= \
                 old_bit[:, :] - (mark[:, :] + j + i) % 2
 
     return new_cont
@@ -20,7 +19,6 @@ def nzb_extract(container):
 
 
 def nzb_insert_secured(contan, mark, key):
-
     import random
     import numpy as np
 
@@ -30,15 +28,14 @@ def nzb_insert_secured(contan, mark, key):
 
     random.seed(key)
     key_mask = np.array([[random.getrandbits(1)
-                        for j in range(new_cont.shape[1])]
+                          for j in range(new_cont.shape[1])]
                          for i in range(new_cont.shape[0])]).astype(np.uint8)
 
     for i in range(len(contan) // st_i):
         for j in range(len(contan[0]) // st_j):
-
-            old_bit = new_cont[i*st_i:(i+1)*st_i, j*st_j:(j+1)*st_j] % 2
-            new_cont[i*st_i:(i+1)*st_i, j*st_j:(j+1)*st_j] -= \
-                old_bit[:, :] - (key_mask[i*st_i:(i+1)*st_i, j*st_j:(j+1)*st_j]
+            old_bit = new_cont[i * st_i:(i + 1) * st_i, j * st_j:(j + 1) * st_j] % 2
+            new_cont[i * st_i:(i + 1) * st_i, j * st_j:(j + 1) * st_j] -= \
+                old_bit[:, :] - (key_mask[i * st_i:(i + 1) * st_i, j * st_j:(j + 1) * st_j]
                                  + mark[:, :] + j + i) % 2
 
     return new_cont
@@ -98,3 +95,21 @@ def extract_dwm_wkey(rgb_container, key):
     dwm_e = nzb_extract_secured(img_as_ubyte(cont_yuv[:, :, 0]), key)
 
     return dwm_e
+
+
+def dwm_guess(dwm, orig_w, orig_h):
+    import numpy as np
+    mid_dwm = np.array([[0] * orig_h] * orig_w).astype(np.uint8)
+    mid_dwm[:, :] = mid_dwm[:, :] * 0
+    for i in range(len(dwm) // orig_w):
+        for j in range(len(dwm[0]) // orig_h):
+            mid_dwm[:, :] = np.clip(mid_dwm[:, :] + pow(-1, i + j)
+                                    * dwm[i * orig_w:(i + 1) * orig_w, j * orig_h:(j + 1) * orig_h], 0, 255)
+
+    threshold = len(dwm) // orig_w * len(dwm[0]) // orig_h
+
+    for i in range(len(mid_dwm)):
+        for j in range(len(mid_dwm[0])):
+            mid_dwm[i, j] = mid_dwm[i, j] if mid_dwm[i, j] > threshold else 0
+
+    return mid_dwm
