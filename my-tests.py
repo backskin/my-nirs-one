@@ -83,29 +83,29 @@ from stegos import insert_dwm, extract_dwm, insert_dwm_wkey, extract_dwm_wkey, d
 
 # TEST 4.1: check simple inc and ext after sharpen (YUM, i.e only Y channel)
 #
-image, dwm = imread('cont.png'), imread('dwm2.bmp')
-
-sharp_mask = 1 / 8 * np.array([[-1, -1, -1],
-                               [-1, 16, -1],
-                               [-1, -1, -1]])[:, :]
-
-im_with_dwm = insert_dwm(image, dwm)
-dwm_layer = extract_dwm(im_with_dwm)
-imshow(dwm_layer)
-plt.show()
-im_with_dwm = convolution_yuv(im_with_dwm.copy(), sharp_mask)
-imsave('cont-with-dwm-sharp(yuv).png', im_with_dwm)
-again_img = imread('cont-with-dwm-sharp(yuv).png')
-imshow(again_img)
-plt.show()
-dwm_layer = extract_dwm(again_img)
-imsave('dwm-layer-sharpen(yuv).png', dwm_layer)
-imshow(dwm_layer)
-plt.show()
-dwm_g = dwm_guess(dwm_layer, dwm.shape[0], dwm.shape[1])
-imsave('dwm-restored-from-sharpen.png', dwm_g)
-imshow(dwm_g)
-plt.show()
+# image, dwm = imread('cont.png'), imread('dwm2.bmp')
+#
+# sharp_mask = 1 / 8 * np.array([[-1, -1, -1],
+#                                [-1, 16, -1],
+#                                [-1, -1, -1]])[:, :]
+#
+# im_with_dwm = insert_dwm(image, dwm)
+# dwm_layer = extract_dwm(im_with_dwm)
+# imshow(dwm_layer)
+# plt.show()
+# im_with_dwm = convolution_yuv(im_with_dwm.copy(), sharp_mask)
+# imsave('cont-with-dwm-sharp(yuv).png', im_with_dwm)
+# again_img = imread('cont-with-dwm-sharp(yuv).png')
+# imshow(again_img)
+# plt.show()
+# dwm_layer = extract_dwm(again_img)
+# imsave('dwm-layer-sharpen(yuv).png', dwm_layer)
+# imshow(dwm_layer)
+# plt.show()
+# dwm_g = dwm_guess(dwm_layer, dwm.shape[0], dwm.shape[1])
+# imsave('dwm-restored-from-sharpen.png', dwm_g)
+# imshow(dwm_g)
+# plt.show()
 
 # TEST 5: check simple inc and ext after median filter
 #

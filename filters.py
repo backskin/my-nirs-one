@@ -54,11 +54,11 @@ def variative_arr(block, mask):
     if len(block) != len(mask):
         raise Exception('Exception during filtering:', 'block.len %d != mask.len %d' % (len(block), len(mask)))
 
-    if len(block) % 2 == 0:
-        raise Exception('Exception during filtering:' 'block.len is even; must be odd number')
-
-    mask = np.array(mask).flatten()
     block = np.array(block).flatten()
+    mask = np.array(mask).flatten()
+    if len(mask) % 2 == 0:
+        raise Exception('Exception during filtering:' 'mask.len is even; must be odd number')
+
     array = []
     for i in range(len(mask)):
         for j in range(mask[i]):
@@ -149,3 +149,9 @@ def rng_filter_yuv(method, img, mask=None):
     cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), 0.0, 1.0))
 
     return cont_rgb
+
+
+def similarity(img1, img2):
+    import numpy as np
+    sqr = img1.shape[0] * img1.shape[1]
+    return 2 *((sqr - (np.clip(abs(img1[:, :] - img2[:, :]), -1, 1).sum())) / sqr - 0.5)

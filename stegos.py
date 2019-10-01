@@ -103,13 +103,12 @@ def dwm_guess(dwm, orig_w, orig_h):
     mid_dwm[:, :] = mid_dwm[:, :] * 0
     for i in range(len(dwm) // orig_w):
         for j in range(len(dwm[0]) // orig_h):
-            mid_dwm[:, :] = np.clip(mid_dwm[:, :] + pow(-1, i + j)
-                                    * dwm[i * orig_w:(i + 1) * orig_w, j * orig_h:(j + 1) * orig_h], 0, 255)
-
-    threshold = len(dwm) // orig_w * len(dwm[0]) // orig_h
+            mid_dwm[:, :] \
+                = np.clip(mid_dwm[:, :] + pow(-1, i + j)
+                          * np.clip(dwm[i * orig_w:(i + 1) * orig_w, j * orig_h:(j + 1) * orig_h], 0, 1), 0, 255)
 
     for i in range(len(mid_dwm)):
         for j in range(len(mid_dwm[0])):
-            mid_dwm[i, j] = mid_dwm[i, j] if mid_dwm[i, j] > threshold else 0
+            mid_dwm[i, j] = 255 if mid_dwm[i, j] > 2 else 0
 
     return mid_dwm
