@@ -1,7 +1,3 @@
-def btb(bool_con):
-    return 1 if bool_con else 0
-
-
 def nzb_insert(contan, mark):
 
     new_cont = contan.copy()
@@ -26,20 +22,23 @@ def nzb_extract(container):
 def nzb_insert_secured(contan, mark, key):
 
     import random
-    random.seed(key)
+    import numpy as np
 
     new_cont = contan.copy()
     st_i = len(mark)
     st_j = len(mark[0])
 
+    random.seed(key)
+    key_mask = np.array([[random.getrandbits(1)
+                          for j in range(new_cont.shape[1])] for i in range(new_cont.shape[0])]).astype(np.uint8)
+
     for i in range(len(contan) // st_i):
         for j in range(len(contan[0]) // st_j):
 
-            key_mask = [[random.getrandbits(1) for j in range(st_j)] for i in range(st_i)]
-
             old_bit = new_cont[i*st_i:(i+1)*st_i, j*st_j:(j+1)*st_j] % 2
             new_cont[i*st_i:(i+1)*st_i, j*st_j:(j+1)*st_j] -= \
-                old_bit[:, :] - (old_bit[:, :] + mark[:, :] + key_mask + j + i) % 2
+                old_bit[:, :] - (key_mask[i*st_i:(i+1)*st_i, j*st_j:(j+1)*st_j]
+                                 + mark[:, :] + j + i) % 2
 
     return new_cont
 
@@ -77,13 +76,24 @@ def extract_dwm(rgb_container):
 
     return dwm_e
 
-def insert_dwm_wkey(rgb_container, dwm):
+
+def insert_dwm_wkey(rgb_container, dwm, key):
     from colorsystem.bt709 import to_yuv, to_rgb
     from skimage import img_as_float, img_as_ubyte
     import numpy as np
 
     cont_yuv = to_yuv(img_as_float(rgb_container))
-    cont_yuv[:, :, 0] = img_as_float(nzb_insert(img_as_ubyte(cont_yuv[:, :, 0]), dwm))
+    cont_yuv[:, :, 0] = img_as_float(nzb_insert_secured(img_as_ubyte(cont_yuv[:, :, 0]), dwm, key))
     cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), 0.0, 1.0))
 
     return cont_rgb
+
+
+def extract_dwm_wkey(rgb_container, key):
+    from colorsystem.bt709 import to_yuv
+    from skimage import img_as_float, img_as_ubyte
+
+    cont_yuv = to_yuv(img_as_float(rgb_container))
+    dwm_e = nzb_extract_secured(img_as_ubyte(cont_yuv[:, :, 0]), key)
+
+    return dwm_e
