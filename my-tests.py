@@ -29,7 +29,7 @@ imsave('bw-fl-layer.png', nzb_extract(n_i))
 
 # TEST 2: inception with key
 #
-image, dwm = imread('cont.png'), imread('dwm3.bmp')
+image, dwm = imread('lenna.png'), imread('dwm3.bmp')
 key = 'hello_world'
 wrong_key = 'bye_bye'
 
@@ -45,7 +45,7 @@ plt.show()
 
 # TEST 3: check simple inception and extraction after noise
 #
-image, dwm = imread('cont.png'), imread('dwm2.bmp')
+image, dwm = imread('red-flower.png'), imread('dwm2.bmp')
 im_with_dwm = insert_dwm(image, dwm)
 imsave('cont-with-dwm.png', im_with_dwm)
 imshow(im_with_dwm)
@@ -93,7 +93,7 @@ plt.show()
 
 # TEST 4.1: check simple inc and ext after sharpen (YUM, i.e only Y channel)
 #
-image, dwm = imread('cont.png'), imread('dwm2.bmp')
+image, dwm = imread('tiger-color.png'), imread('dwm2.bmp')
 
 sharp_mask = 1 / 8 * np.array([[-1, -1, -1],
                                [-1, 16, -1],
@@ -119,7 +119,7 @@ plt.show()
 
 # TEST 4.2: check simple inc and ext after linear smoothin'
 #
-image, dwm = imread('palm-tree.jpg'), imread('dwm3.bmp')
+image, dwm = imread('tiger-color.jpg'), imread('dwm3.bmp')
 mask = 1 / 9 * np.array([[1, 1, 1],
                          [1, 1, 1],
                          [1, 1, 1]])[:, :]

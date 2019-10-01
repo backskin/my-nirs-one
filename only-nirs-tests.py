@@ -8,7 +8,7 @@ from stegos import insert_dwm, extract_dwm, insert_dwm_wkey, extract_dwm_wkey, d
 from colorsystem.bt709 import check_restoration
 
 # Test 0 - зашумить - встроить ЦВЗ - восстановить медианой - извлечь ЦВЗ
-# график зависимости для шума (его дисперсии) перед встраиванием
+# График зависимости для шума (его дисперсии)
 values = []
 steps = 20
 k = 0.5
