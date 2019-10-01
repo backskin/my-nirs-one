@@ -152,5 +152,6 @@ def rng_filter_yuv(method, img, mask=None):
 
 def similarity(img1, img2):
     import numpy as np
-    sqr = img1.shape[0] * img1.shape[1]
-    return 2 * ((sqr - (np.clip(abs(img1[:, :] - img2[:, :]), -1, 1).sum())) / sqr - 0.5)
+
+    sqr = img1.shape[0] * img1.shape[1] / 2
+    return (sqr - (abs(np.clip(img1[:, :] % 2 - img2[:, :] % 2, -1, 1)).sum())) / sqr

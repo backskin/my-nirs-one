@@ -26,9 +26,9 @@ def check_restoration(ubyte_image):
 
     from skimage import img_as_float, img_as_ubyte
 
-    image_fl = img_as_float(ubyte_image)
+    image_fl = img_as_float(ubyte_image, True)
     cont_yuv = to_yuv(image_fl)
-    image_restored = img_as_ubyte(clip(to_rgb(cont_yuv), 0.0, 1.0))
+    image_restored = img_as_ubyte(clip(to_rgb(cont_yuv), -1.0, 1.0))
 
     from numpy import array_equal
     return array_equal(image_restored, ubyte_image)

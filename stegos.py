@@ -7,7 +7,7 @@ def nzb_insert(contan, watermark):
         for j in range(len(contan[0]) // st_j):
             old_bit = new_cont[i * st_i:(i + 1) * st_i, j * st_j:(j + 1) * st_j] % 2
             new_cont[i * st_i:(i + 1) * st_i, j * st_j:(j + 1) * st_j] -= \
-                old_bit[:, :] - (watermark[:, :] + j + i) % 2
+                old_bit[:, :] - (watermark[:, :] % 2 + (j + i) % 2) % 2
 
     return new_cont
 
@@ -60,7 +60,7 @@ def insert_dwm(rgb_container, dwm):
 
     cont_yuv = to_yuv(img_as_float(rgb_container))
     cont_yuv[:, :, 0] = img_as_float(nzb_insert(img_as_ubyte(cont_yuv[:, :, 0]), dwm))
-    cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), 0.0, 1.0))
+    cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), -1, 1))
 
     return cont_rgb
 
@@ -68,9 +68,9 @@ def insert_dwm(rgb_container, dwm):
 def extract_dwm(rgb_container):
     from colorsystem.bt709 import to_yuv
     from skimage import img_as_float, img_as_ubyte
-
+    import numpy as np
     cont_yuv = to_yuv(img_as_float(rgb_container))
-    dwm_e = nzb_extract(img_as_ubyte(cont_yuv[:, :, 0]))
+    dwm_e = nzb_extract(img_as_ubyte(np.clip(cont_yuv[:, :, 0], -1, 1)))
 
     return dwm_e
 
@@ -82,7 +82,7 @@ def insert_dwm_wkey(rgb_container, dwm, key):
 
     cont_yuv = to_yuv(img_as_float(rgb_container))
     cont_yuv[:, :, 0] = img_as_float(nzb_insert_secured(img_as_ubyte(cont_yuv[:, :, 0]), dwm, key))
-    cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), 0.0, 1.0))
+    cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), -1, 1))
 
     return cont_rgb
 
@@ -107,8 +107,10 @@ def dwm_guess(dwm, orig_w, orig_h):
                 = np.clip(mid_dwm[:, :] + pow(-1, i + j)
                           * np.clip(dwm[i * orig_w:(i + 1) * orig_w, j * orig_h:(j + 1) * orig_h], 0, 1), 0, 255)
 
+    threshold = len(dwm) // orig_w * len(dwm[0]) // orig_h // 4
+
     for i in range(len(mid_dwm)):
         for j in range(len(mid_dwm[0])):
-            mid_dwm[i, j] = 255 if mid_dwm[i, j] > 2 else 0
+            mid_dwm[i, j] = 255 if mid_dwm[i, j] > threshold else 0
 
     return mid_dwm
