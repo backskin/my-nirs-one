@@ -1,13 +1,13 @@
-def nzb_insert(contan, mark):
+def nzb_insert(contan, watermark):
     new_cont = contan.copy()
-    st_i = len(mark)
-    st_j = len(mark[0])
+    st_i = len(watermark)
+    st_j = len(watermark[0])
 
     for i in range(len(contan) // st_i):
         for j in range(len(contan[0]) // st_j):
             old_bit = new_cont[i * st_i:(i + 1) * st_i, j * st_j:(j + 1) * st_j] % 2
             new_cont[i * st_i:(i + 1) * st_i, j * st_j:(j + 1) * st_j] -= \
-                old_bit[:, :] - (mark[:, :] + j + i) % 2
+                old_bit[:, :] - (watermark[:, :] + j + i) % 2
 
     return new_cont
 

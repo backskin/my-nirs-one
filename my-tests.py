@@ -1,20 +1,30 @@
 from skimage.io import imread, imsave, imshow
+from skimage import img_as_float, img_as_ubyte
 import matplotlib.pyplot as plt
 import numpy as np
-
+from colorsystem.bt709 import to_yuv, to_rgb
 from filters import rng_filter_rgb, rng_filter_yuv, median, erosion, dilatation, \
     convolution_rgb, convolution_yuv, noising_yuv, noising_rgb
-from stegos import insert_dwm, extract_dwm, insert_dwm_wkey, extract_dwm_wkey, dwm_guess
+from stegos import insert_dwm, extract_dwm, insert_dwm_wkey, extract_dwm_wkey, dwm_guess, nzb_insert, nzb_extract
 
 # TEST 1 : simple inception
 #
-# image, dwm = imread('cont.png'), imread('dwm2.bmp')
-# im_with_dwm = insert_dwm(image, dwm)
-# imsave('cont-with-dwm.png', im_with_dwm)
-# again_img = imread('cont-with-dwm.png')
-# dwm_layer = extract_dwm(again_img)
+image, dwm = imread('palm-tree.jpg'), imread('dwm3.bmp')
+image_yuv = to_yuv(img_as_float(image))
+imsave('cont-yuv.png', img_as_ubyte(image_yuv))
+imsave('cont-yuv-y.png', img_as_ubyte(np.array(image_yuv[:, :, 0])))
+im_with_dwm = insert_dwm(image, dwm)
+imsave('cont-with-dwm.png', im_with_dwm)
+again_img = imread('cont-with-dwm.png')
+dwm_layer = extract_dwm(again_img)
+imsave('dwm-layer-1.png', dwm_layer)
 # imshow(dwm_layer)
 # plt.show()
+
+# img, dwm = imread('bw-flower.png'), imread('dwm2.bmp')
+# n_i = nzb_insert(img, dwm)
+# imsave('bw-flower-nzb.png', n_i)
+# imsave('bw-fl-layer.png', nzb_extract(n_i))
 
 
 # TEST 2: inception with key
