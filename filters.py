@@ -44,7 +44,7 @@ def convolution_yuv(img, mask):
 
     cont_yuv = to_yuv(img_as_float(img))
     cont_yuv[:, :, 0] = img_as_float(convolution(img_as_ubyte(cont_yuv[:, :, 0]), mask))
-    cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), 0.0, 1.0))
+    cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), -1, 1))
 
     return cont_rgb
 
@@ -119,7 +119,7 @@ def noising_yuv(img, ratio=1):
 
     cont_yuv = to_yuv(img_as_float(img))
     cont_yuv[:, :, 0] = img_as_float(noising(img_as_ubyte(cont_yuv[:, :, 0]), ratio))
-    cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), 0.0, 1.0))
+    cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), -1, 1))
 
     return cont_rgb
 
@@ -145,13 +145,18 @@ def rng_filter_yuv(method, img, mask=None):
 
     cont_yuv = to_yuv(img_as_float(img))
     cont_yuv[:, :, 0] = img_as_float(rng_filter(method, img_as_ubyte(cont_yuv[:, :, 0]), mask))
-    cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), 0.0, 1.0))
+    cont_rgb = img_as_ubyte(np.clip(to_rgb(cont_yuv), -1, 1))
 
     return cont_rgb
 
 
 def similarity(img1, img2):
+    # TO-DO: поставить сравнение размеров
     import numpy as np
-
-    sqr = img1.shape[0] * img1.shape[1] / 2
-    return (sqr - (abs(np.clip(img1[:, :] % 2 - img2[:, :] % 2, -1, 1)).sum())) / sqr
+    img1 = np.array(img1).astype(np.int)
+    img2 = np.array(img2).astype(np.int)
+    # если вычесть белый шум, то получится в среднем половина попаданий
+    # поэтому нужно результат сместить на 0.5 и умножить на 2
+    img_sub = np.absolute(np.clip(img1 - img2, -1, 1)).sum()
+    sqr = img1.shape[0] * img1.shape[1]
+    return np.clip(2 * (sqr//2 - img_sub) / sqr, 0, 1)

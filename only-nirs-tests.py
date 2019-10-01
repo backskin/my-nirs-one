@@ -10,16 +10,15 @@ from colorsystem.bt709 import check_restoration
 # Test 0 - зашумить - встроить ЦВЗ - восстановить медианой - извлечь ЦВЗ
 # график зависимости для шума (его дисперсии) перед встраиванием
 values = []
-steps = 50
-k = 0.2
+steps = 20
+k = 0.5
+
 
 for i in range(steps):
     image, dwm = imread('red-flower.png'), imread('dwm3.bmp')
-    image = noising_yuv(image, i * k)
     im_with_dwm = insert_dwm(image, dwm)
     im_with_dwm = noising_yuv(im_with_dwm, i * k)
     im_with_dwm = rng_filter_yuv(median, im_with_dwm)
-    imsave('red_flower-r'+str(i) +'.png', im_with_dwm)
     dwm_layer = extract_dwm(im_with_dwm)
     dwm_g = dwm_guess(dwm_layer, dwm.shape[0], dwm.shape[1])
     imsave('dwm_red_flower-'+str(i)+'.png', dwm_g)

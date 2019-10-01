@@ -105,9 +105,9 @@ def dwm_guess(dwm, orig_w, orig_h):
         for j in range(len(dwm[0]) // orig_h):
             mid_dwm[:, :] \
                 = np.clip(mid_dwm[:, :] + pow(-1, i + j)
-                          * np.clip(dwm[i * orig_w:(i + 1) * orig_w, j * orig_h:(j + 1) * orig_h], 0, 1), 0, 255)
+                          * (2 * (-dwm[i * orig_w:(i + 1) * orig_w, j * orig_h:(j + 1) * orig_h] % 2) + 1), 0, 255)
 
-    threshold = len(dwm) // orig_w * len(dwm[0]) // orig_h // 4
+    threshold = len(dwm) // orig_w * len(dwm[0]) // orig_h // 8
 
     for i in range(len(mid_dwm)):
         for j in range(len(mid_dwm[0])):
