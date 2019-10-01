@@ -54,7 +54,7 @@ def nzb_extract_secured(container, key):
 
 
 def insert_dwm(rgb_container, dwm):
-    from colorsystem.bt709 import to_yuv, to_rgb
+    from bt709 import to_yuv, to_rgb
     from skimage import img_as_float, img_as_ubyte
     import numpy as np
 
@@ -66,7 +66,7 @@ def insert_dwm(rgb_container, dwm):
 
 
 def extract_dwm(rgb_container):
-    from colorsystem.bt709 import to_yuv
+    from bt709 import to_yuv
     from skimage import img_as_float, img_as_ubyte
     import numpy as np
     cont_yuv = to_yuv(img_as_float(rgb_container))
@@ -76,7 +76,7 @@ def extract_dwm(rgb_container):
 
 
 def insert_dwm_wkey(rgb_container, dwm, key):
-    from colorsystem.bt709 import to_yuv, to_rgb
+    from bt709 import to_yuv, to_rgb
     from skimage import img_as_float, img_as_ubyte
     import numpy as np
 
@@ -88,7 +88,7 @@ def insert_dwm_wkey(rgb_container, dwm, key):
 
 
 def extract_dwm_wkey(rgb_container, key):
-    from colorsystem.bt709 import to_yuv
+    from bt709 import to_yuv
     from skimage import img_as_float, img_as_ubyte
 
     cont_yuv = to_yuv(img_as_float(rgb_container))

@@ -2,9 +2,9 @@ from skimage.io import imread, imsave, imshow
 from skimage import img_as_float, img_as_ubyte
 import matplotlib.pyplot as plt
 import numpy as np
-from colorsystem.bt709 import to_yuv, to_rgb
-from filters import rng_filter_rgb, rng_filter_yuv, median, erosion, dilatation, \
-    convolution_rgb, convolution_yuv, noising_yuv, noising_rgb, similarity
+from bt709 import to_yuv
+from filters import rng_filter_yuv, median, erosion, dilatation, \
+    convolution_rgb, convolution_yuv, noising_yuv, similarity
 from stegos import insert_dwm, extract_dwm, insert_dwm_wkey, extract_dwm_wkey, dwm_guess, nzb_insert, nzb_extract
 
 # TEST 1 : simple inception

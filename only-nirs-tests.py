@@ -1,11 +1,9 @@
-from skimage.io import imread, imsave, imshow
+from skimage.io import imread, imsave
 import matplotlib.pyplot as plt
 import numpy as np
 
-from filters import rng_filter_rgb, rng_filter_yuv, median, erosion, dilatation, \
-    convolution_rgb, convolution_yuv, noising_yuv, noising_rgb, similarity
-from stegos import insert_dwm, extract_dwm, insert_dwm_wkey, extract_dwm_wkey, dwm_guess
-from colorsystem.bt709 import check_restoration
+from filters import noising_yuv, similarity
+from stegos import insert_dwm, extract_dwm, dwm_guess
 
 # Test 0 - зашумить - встроить ЦВЗ - восстановить медианой - извлечь ЦВЗ
 # График зависимости для шума (его дисперсии)
