@@ -14,7 +14,7 @@ steps = 50
 k = 0.2
 
 for i in range(steps):
-    image, dwm = imread('palm-tree.jpg'), imread('dwm3.bmp')
+    image, dwm = imread('red-flower.png'), imread('dwm3.bmp')
     image = noising_yuv(image, i * k)
     im_with_dwm = insert_dwm(image, dwm)
     im_with_dwm = noising_yuv(im_with_dwm, i * k)
