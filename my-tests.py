@@ -1,7 +1,7 @@
 from skimage.io import imread, imsave, imshow
 import matplotlib.pyplot as plt
 import numpy as np
-from filters import rng_filter_yuv, median, erosion, dilatation, sharping, \
+from filters import rng_filter_yuv, median, erosion, dilatation, outline, \
     convolution_rgb, convolution_yuv, noising_yuv, similarity
 from stegas import insert_dwm, extract_dwm, insert_dwm_wkey, \
     extract_dwm_wkey, dwm_guess, nzb_insert, nzb_extract
@@ -178,9 +178,9 @@ image, dwm = imread('red-flower.png'), imread('dwm2.bmp')
 # plt.show()
 
 im_with_dwm = image.copy()
-im_with_dwm = rng_filter_yuv(sharping, im_with_dwm)
-im_with_dwm = rng_filter_yuv(sharping, im_with_dwm)
-im_with_dwm = rng_filter_yuv(sharping, im_with_dwm)
+im_with_dwm = rng_filter_yuv(outline, im_with_dwm)
+im_with_dwm = rng_filter_yuv(outline, im_with_dwm)
+im_with_dwm = rng_filter_yuv(outline, im_with_dwm)
 imsave('red-flower-sharping.png', im_with_dwm)
 im_with_dwm = image.copy()
 im_with_dwm = rng_filter_yuv(median, im_with_dwm)
