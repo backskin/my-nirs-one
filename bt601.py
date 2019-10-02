@@ -1,7 +1,5 @@
-from numpy import clip
-
-
 def to_yuv(img_f):
+    from numpy import clip
     yuv_image = img_f.copy()
 
     yuv_image[:, :, 0] = 0.299 * img_f[:, :, 0] + 0.587 * img_f[:, :, 1] + 0.114 * img_f[:, :, 2]
@@ -15,6 +13,7 @@ def to_yuv(img_f):
 
 
 def to_rgb(yuv_f):
+    from numpy import clip
     img_out = yuv_f.copy()
     img_out[:, :, 0] = yuv_f[:, :, 0] + 1.14 * yuv_f[:, :, 2]
     img_out[:, :, 1] = yuv_f[:, :, 0] - 0.395 * yuv_f[:, :, 1] - 0.581 * yuv_f[:, :, 2]

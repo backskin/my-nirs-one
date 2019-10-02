@@ -103,6 +103,11 @@ def median(block, mask):
     return v_arr[len(v_arr) // 2 + 1]
 
 
+def sharping(block, mask):
+    v_arr = variative_arr(block, mask)
+    return v_arr[len(v_arr)-1] - v_arr[0]
+
+
 def rng_filter(method, img, mask):
     import numpy as np
     m_w = len(mask)
